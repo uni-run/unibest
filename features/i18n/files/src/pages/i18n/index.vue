@@ -1,15 +1,13 @@
-<route lang="json">
-{
-  "style": {
-    "navigationBarTitleText": "%i18n.title%"
-  }
-}
-</route>
-
 <script lang="ts" setup>
 import i18n, { t } from '@/locale/index'
 import { setTabbarItem } from '@/tabbar/i18n'
 import { testI18n } from '@/utils/i18n'
+
+definePage({
+  style: {
+    navigationBarTitleText: '%i18n.title%',
+  },
+})
 
 const current = ref(uni.getLocale())
 const user = { name: '张三', detail: { height: 178, weight: '75kg' } }
@@ -46,20 +44,14 @@ function radioChange(evt) {
     <view class="p-4 text-red-500 leading-6">
       经过我的测试发现，小程序里面会有2处BUG：
       <view>
-        <text class="line-through">
-          1. 页面标题多语言不生效
-        </text>
-        <text class="ml-2 text-green-500">
-          已解决
-        </text>
+        <text class="line-through"> 1. 页面标题多语言不生效 </text>
+        <text class="ml-2 text-green-500"> 已解决 </text>
       </view>
       <view>
         <text class="line-through">
           2. 多语言传递的参数不生效，如下 heavy
         </text>
-        <text class="ml-2 text-green-500">
-          已解决
-        </text>
+        <text class="ml-2 text-green-500"> 已解决 </text>
         <view class="ml-2 text-green-500">
           把 $t 改为自定义的 t 即可
         </view>
@@ -69,22 +61,22 @@ function radioChange(evt) {
       多语言测试
     </view>
     <view class="m-4">
-      {{ $t('i18n.title') }}
+      {{ $t("i18n.title") }}
     </view>
     <view class="text-gray-500 italic">
-      使用$t: {{ $t('weight', { heavy: 100 }) }}
+      使用$t: {{ $t("weight", { heavy: 100 }) }}
     </view>
     <view class="m-4">
-      {{ $t('weight', { heavy: 100 }) }}
+      {{ $t("weight", { heavy: 100 }) }}
     </view>
     <view class="text-gray-500 italic">
-      使用t: {{ t('weight', { heavy: 100 }) }}
+      使用t: {{ t("weight", { heavy: 100 }) }}
     </view>
     <view class="m-4">
-      {{ t('weight', { heavy: 100 }) }}
+      {{ t("weight", { heavy: 100 }) }}
     </view>
     <view class="m-4">
-      {{ t('introduction', user) }}
+      {{ t("introduction", user) }}
     </view>
 
     <view class="mt-12 text-green-500">
@@ -92,7 +84,11 @@ function radioChange(evt) {
     </view>
     <view class="uni-list">
       <radio-group class="radio-group" @change="radioChange">
-        <label v-for="item in languages" :key="item.value" class="uni-list-cell uni-list-cell-pd">
+        <label
+          v-for="item in languages"
+          :key="item.value"
+          class="uni-list-cell uni-list-cell-pd"
+        >
           <view>
             <radio :value="item.value" :checked="item.value === current" />
           </view>
