@@ -12,11 +12,11 @@ npm whoami
 ### 2. 处理登录状态
 如果未登录或 token 过期：
 ```bash
-npm login
+npm login --registry=https://registry.npmjs.org/
 ```
 - 密码输入不会显示，是正常的
 - OTP 会通过邮箱或 Authenticator app 发送
-- **注意**：token 过期时直接登录即可，`npm login` 会自动覆盖过期凭据，无需先 `npm logout`
+- **重要**：使用 `--registry` 参数确保登录到官方源
 
 ### 3. 升级版本号
 ```bash
@@ -49,10 +49,10 @@ npm publish --no-workspaces --otp=<验证码>
 
 ```bash
 # 1. 检查登录状态
-npm whoami
+npm whoami --registry=https://registry.npmjs.org/
 if [ $? -ne 0 ]; then
   echo "登录已过期或未登录，正在登录..."
-  npm login
+  npm login --registry=https://registry.npmjs.org/
 fi
 
 # 2. 进入项目目录
@@ -65,21 +65,21 @@ npm version patch --no-git-tag-version
 pnpm build
 
 # 5. 发布（如果需要 OTP，会返回 EOTP）
-npm publish --no-workspaces
+npm publish --no-workspaces --registry=https://registry.npmjs.org/
 
 # 6. 等待用户提供 OTP，然后用 OTP 重新发布
-npm publish --no-workspaces --otp=<用户提供的验证码>
+npm publish --no-workspaces --otp=<用户提供的验证码> --registry=https://registry.npmjs.org/
 ```
 
 ## 关键点
 
-1. **先检查登录** - `npm whoami` 可以快速验证登录状态
-2. **登录过期直接登录** - token 过期时直接 `npm login` 会自动覆盖，无需 logout
-3. **只问 OTP** - 不需要重复执行发布命令，让用户直接提供 OTP
-4. **`--no-workspaces`** - monorepo 项目需要加这个参数避免发布所有 workspace
-5. **`--no-git-tag-version`** - 只更新 package.json 版本，不创建 git tag
-6. **版本号递增** - 如果版本已存在，需要先执行 `npm version patch`
-7. **npm 源** - 确保是官方源 `https://registry.npmjs.org/`
+1. **先检查登录** - `npm whoami --registry=https://registry.npmjs.org/` 可以快速验证登录状态
+2. **使用 `--registry` 参数** - 所有 npm 命令都加上 `--registry=https://registry.npmjs.org/`
+3. **登录过期直接登录** - token 过期时直接 `npm login --registry=https://registry.npmjs.org/`
+4. **只问 OTP** - 不需要重复执行发布命令，让用户直接提供 OTP
+5. **`--no-workspaces`** - monorepo 项目需要加这个参数避免发布所有 workspace
+6. **`--no-git-tag-version`** - 只更新 package.json 版本，不创建 git tag
+7. **版本号递增** - 如果版本已存在，需要先执行 `npm version patch`
 
 ## 常见错误处理
 
@@ -95,5 +95,5 @@ npm publish --no-workspaces --otp=<用户提供的验证码>
 
 当执行任何 npm 命令时，如果遇到登录过期：
 1. 检测到过期信息（包含 "expired"、"revoked"、"401"、"UNAUTHENTICATED"）
-2. 提示用户执行 `npm login` 重新登录
+2. 提示用户执行 `npm login --registry=https://registry.npmjs.org/` 重新登录
 3. 登录成功后继续执行原流程

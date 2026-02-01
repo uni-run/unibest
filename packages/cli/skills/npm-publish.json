@@ -25,7 +25,7 @@
   "workflow": [
     {
       "step": "check_login",
-      "command": "cd {{packagePath}} && npm whoami",
+      "command": "cd {{packagePath}} && npm whoami --registry=https://registry.npmjs.org/",
       "onSuccess": "bump_version",
       "onError": "handle_login_error",
       "errorMessage": "Not logged in or token expired"
@@ -38,10 +38,10 @@
     },
     {
       "step": "login",
-      "command": "cd {{packagePath}} && npm login",
+      "command": "cd {{packagePath}} && npm login --registry=https://registry.npmjs.org/",
       "prompt": ["Enter npm username:", "Enter npm password:", "Enter npm OTP (from email/authenticator):"],
       "onSuccess": "bump_version",
-      "description": "Interactive npm login, requires user to provide credentials and OTP"
+      "description": "Interactive npm login with official registry"
     },
     {
       "step": "bump_version",
@@ -57,7 +57,7 @@
     },
     {
       "step": "publish",
-      "command": "cd {{packagePath}} && npm publish --no-workspaces",
+      "command": "cd {{packagePath}} && npm publish --no-workspaces --registry=https://registry.npmjs.org/",
       "onSuccess": "done",
       "onError": "handle_otp_or_version_error",
       "description": "Publish to npm registry"
@@ -84,7 +84,7 @@
     },
     {
       "step": "publish_with_otp",
-      "command": "cd {{packagePath}} && npm publish --no-workspaces --otp={{otp}}",
+      "command": "cd {{packagePath}} && npm publish --no-workspaces --otp={{otp}} --registry=https://registry.npmjs.org/",
       "onSuccess": "done",
       "onError": "ask_otp",
       "description": "Retry publish with OTP code"
