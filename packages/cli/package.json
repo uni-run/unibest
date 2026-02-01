@@ -1,7 +1,7 @@
 {
   "name": "create-unibest",
   "type": "module",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "packageManager": "pnpm@10.10.0",
   "description": "快速创建 unibest 项目的脚手架工具",
   "author": "feige996",
@@ -14,7 +14,8 @@
   },
   "files": [
     "bin",
-    "dist"
+    "dist",
+    "features"
   ],
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsup --watch",
