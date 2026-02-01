@@ -172,6 +172,12 @@ export async function injectLogin(projectPath: string): Promise<InjectResult[]> 
     'login/files/src/router/config.ts'
   ))
 
+  // 替换 pages/me/me.vue
+  results.push(injector.replaceFile(
+    'src/pages/me/me.vue',
+    'login/files/src/pages/me.vue'
+  ))
+
   // 创建 login 专用文件
   const loginFiles = [
     'src/pages-auth/login.vue',
