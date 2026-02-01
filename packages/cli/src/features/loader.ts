@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 // 从 CLI 包的安装目录查找 features
-const FEATURES_DIR = path.resolve(__dirname, '../../features')
+const FEATURES_DIR = path.resolve(__dirname, '..', '..', 'features')
 
 /**
  * 加载 Feature 资源文件
