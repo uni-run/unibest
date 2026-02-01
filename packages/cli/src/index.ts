@@ -1,17 +1,14 @@
 #!/usr/bin/env node
 import process from 'node:process'
+import { green, yellow } from 'kolorist'
 import minimist from 'minimist'
-import { createCommand } from './commands/create'
-import { printHelp } from './utils/help'
-import { debug } from './utils/debug' // 导入我们的debug工具函数
-import { getUnibestVersionFromGitee as getUnibestVersion } from './utils/unibestVersion'
 import { version } from '../package.json'
-import { color } from './utils/color'
-import { green, red } from 'kolorist'
-import { yellow } from 'kolorist'
-/**
- * unibest-cli 主入口函数
- */
+import { addCommand } from './commands/add'
+import { createCommand } from './commands/create'
+import { debug } from './utils/debug'
+import { printHelp } from './utils/help'
+import { getUnibestVersionFromGitee as getUnibestVersion } from './utils/unibestVersion'
+
 function main() {
   const args = minimist(process.argv.slice(2))
   const command = args._[0]
@@ -33,6 +30,9 @@ function main() {
     case 'create':
     case 'new':
       createCommand(args)
+      break
+    case 'add':
+      addCommand(args)
       break
     case '-h':
     case '--help':
@@ -60,7 +60,8 @@ async function printVersion() {
     console.log(`unibest-cli ${cliVersion} ${yellow(`->`)} ${green(`最新版本: ${latestVersion}`)}`)
     console.log(`使用 ${green(`npm update -g create-unibest`)} 或 ${green(`pnpm add -g create-unibest`)} 更新`)
     console.log()
-  } else {
+  }
+  else {
     console.log(`unibest-cli ${cliVersion}`)
     console.log()
   }
