@@ -1,0 +1,35 @@
+{
+  "name": "@fllygo/template-base",
+  "type": "module",
+  "version": "4.3.1",
+  "description": "unibest 基础模板",
+  "main": "src",
+  "exports": {
+    ".": "./src",
+    "./src/main.ts": "./src/main.ts"
+  },
+  "files": [
+    "src",
+    "tsconfig.json",
+    "vite.config.ts",
+    "uno.config.ts",
+    "manifest.config.ts",
+    "pages.config.ts",
+    "index.html",
+    ".gitignore",
+    ".editorconfig",
+    ".commitlintrc.cjs",
+    "eslint.config.mjs",
+    "openapi-ts-request.config.ts",
+    "env",
+    "vite-plugins",
+    "scripts",
+    ".husky",
+    ".vscode",
+    ".trae"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
