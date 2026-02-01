@@ -37,13 +37,27 @@ npm publish --no-workspaces
 
 ### 6. 处理 OTP 验证码
 发布命令可能返回 `EOTP` 错误，要求提供一次性验证码：
-- **首次发布时直接需要 OTP**：询问用户 OTP 后加 `--otp` 参数重试
-- **首次发布不需要 OTP**：等待 npm 返回 EOTP 后再询问
+- **首次发布直接需要 OTP**：脚本自动暂停，询问用户 OTP 后继续
+- **首次发布不需要 OTP**：npm 返回 EOTP 后，脚本自动询问用户 OTP
 
 ### 7. OTP 验证后重新发布
 ```bash
-npm publish --no-workspaces --otp=<验证码>
+npm publish --no-workspaces --otp=<验证码> --registry=https://registry.npmjs.org/
 ```
+
+## OTP 自动询问流程
+
+```
+发布失败 (EOTP)
+       ↓
+自动提示用户输入 OTP
+       ↓
+用户输入验证码
+       ↓
+自动重试发布 (带 OTP)
+```
+
+**关键点**：`onError` 检测到 `EOTP` 时，自动跳转到 `ask_otp` 步骤询问用户，收到 OTP 后自动重试发布。
 
 ## 完整命令序列
 
