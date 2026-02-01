@@ -1,13 +1,13 @@
-import process from 'node:process'
-import { logger } from '../../utils/logger'
 import type { PromptResult } from '../../types'
-import { log } from '@clack/prompts'
-import { cloneRepoByBranch } from '../../utils/cloneRepo'
-import { applyUILibraryConfig } from '../../utils/uiLibrary'
-import { injectI18n, injectLogin } from '../../utils/injector'
-import { getSelectedFeatures } from '../../features'
-import { debug } from '../../utils/debug'
 import path from 'node:path'
+import process from 'node:process'
+import { log } from '@clack/prompts'
+import { getSelectedFeatures } from '../../features'
+import { cloneRepoByBranch } from '../../utils/cloneRepo'
+import { debug } from '../../utils/debug'
+import { injectI18n, injectLogin } from '../../utils/injector'
+import { logger } from '../../utils/logger'
+import { applyUILibraryConfig } from '../../utils/uiLibrary'
 
 const root = process.cwd()
 
@@ -28,7 +28,8 @@ export async function generateProject(options: PromptResult) {
     for (const result of results) {
       if (result.success) {
         debug(result.message)
-      } else {
+      }
+      else {
         logger.warn(result.message)
       }
     }
@@ -41,7 +42,8 @@ export async function generateProject(options: PromptResult) {
     for (const result of results) {
       if (result.success) {
         debug(result.message)
-      } else {
+      }
+      else {
         logger.warn(result.message)
       }
     }
@@ -50,12 +52,14 @@ export async function generateProject(options: PromptResult) {
   // 4. UI 库配置
   if (uiLibrary === 'none') {
     debug('不引入任何UI库')
-  } else {
+  }
+  else {
     debug(`配置 UI 库: ${uiLibrary}`)
     try {
       await applyUILibraryConfig(projectPath, uiLibrary)
       logger.success(`UI 库 ${uiLibrary} 配置完成`)
-    } catch (error) {
+    }
+    catch (error) {
       logger.warn(`UI 库 ${uiLibrary} 配置失败: ${(error as Error).message}`)
       logger.info('您可以在项目创建后手动配置 UI 库')
     }
@@ -71,18 +75,19 @@ export async function generateProject(options: PromptResult) {
   }
 
   if (Object.keys(allDeps).length > 0) {
-    logger.info(`Feature 依赖: ${Object.keys(allDeps).join(', ')}`)
+    log.info(`Feature 依赖: ${Object.keys(allDeps).join(', ')}`)
   }
 
   try {
     log.success(`项目${projectName}创建成功！`)
-    logger.info('下一步:')
-    logger.info(`  cd ${projectName}`)
-    logger.info('  pnpm i')
-    logger.info('  pnpm dev')
-    logger.info('  运行完以上命令后，再运行其他平台')
-    logger.info('  如：pnpm dev:mp, pnpm dev:app 等')
-  } catch (error) {
+    console.log('下一步:')
+    console.log(`  cd ${projectName}`)
+    console.log('  pnpm i')
+    console.log('  pnpm dev')
+    console.log('  运行完以上命令后，再运行其他平台')
+    console.log('  如：pnpm dev:mp, pnpm dev:app 等')
+  }
+  catch (error) {
     logger.error(`生成项目失败: ${(error as Error).message}`)
     throw error
   }
