@@ -11,6 +11,7 @@ function doRegister() {
   uni.showToast({
     title: '注册成功',
   })
+  // 注册成功后跳转到登录页
   uni.navigateTo({
     url: LOGIN_PAGE,
   })
@@ -29,4 +30,5 @@ function doRegister() {
 </template>
 
 <style lang="scss" scoped>
+//
 </style>

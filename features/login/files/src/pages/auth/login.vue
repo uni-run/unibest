@@ -14,6 +14,7 @@ async function doLogin() {
     return
   }
   try {
+    // 调用登录接口
     await tokenStore.login({
       username: '菲鸽',
       password: '123456',
@@ -28,6 +29,7 @@ async function doLogin() {
 
 <template>
   <view class="login">
+    <!-- 本页面是非MP的登录页，主要用于 h5 和 APP -->
     <view class="text-center">
       登录页
     </view>
@@ -38,4 +40,5 @@ async function doLogin() {
 </template>
 
 <style lang="scss" scoped>
+//
 </style>

@@ -180,9 +180,9 @@ export async function injectLogin(projectPath: string): Promise<InjectResult[]> 
 
   // 创建 login 专用文件
   const loginFiles = [
-    'src/pages-auth/login.vue',
-    'src/pages-auth/register.vue',
-    'src/pages-auth/README.md',
+    'src/pages/auth/login.vue',
+    'src/pages/auth/register.vue',
+    'src/pages/auth/README.md',
   ]
 
   for (const file of loginFiles) {
