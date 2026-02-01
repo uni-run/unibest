@@ -7,16 +7,17 @@
 npm whoami
 ```
 - 如果返回用户名 → 已登录，继续步骤 2
-- 如果返回错误或空 → 未登录，执行 `npm login`
+- 如果返回错误或空 → 未登录，执行步骤 2
 
-### 2. 登录 npm（如果未登录）
+### 2. 处理登录状态
+如果未登录或 token 过期：
 ```bash
+npm logout
 npm login
-# 输入用户名、密码，然后等待 OTP 验证码
 ```
 - 密码输入不会显示，是正常的
 - OTP 会通过邮箱或 Authenticator app 发送
-- 如果登录失败（如 401），说明会话过期，需要重新登录
+- **重要**：如果 `npm whoami` 返回 401/403 或提示 token 过期，需要先执行 `npm logout` 再登录
 
 ### 3. 升级版本号
 ```bash
@@ -49,7 +50,12 @@ npm publish --no-workspaces --otp=<验证码>
 
 ```bash
 # 1. 检查登录状态
-npm whoami || npm login
+npm whoami
+if [ $? -ne 0 ]; then
+  echo "登录已过期或未登录，正在退出并重新登录..."
+  npm logout
+  npm login
+fi
 
 # 2. 进入项目目录
 cd /path/to/package
@@ -70,17 +76,27 @@ npm publish --no-workspaces --otp=<用户提供的验证码>
 ## 关键点
 
 1. **先检查登录** - `npm whoami` 可以快速验证登录状态
-2. **只问 OTP** - 不需要重复执行发布命令，让用户直接提供 OTP
-3. **`--no-workspaces`** - monorepo 项目需要加这个参数避免发布所有 workspace
-4. **`--no-git-tag-version`** - 只更新 package.json 版本，不创建 git tag
-5. **版本号递增** - 如果版本已存在，需要先执行 `npm version patch`
-6. **npm 源** - 确保是官方源 `https://registry.npmjs.org/`
+2. **登录过期先退出** - token 过期时必须先 `npm logout` 再 `npm login`
+3. **只问 OTP** - 不需要重复执行发布命令，让用户直接提供 OTP
+4. **`--no-workspaces`** - monorepo 项目需要加这个参数避免发布所有 workspace
+5. **`--no-git-tag-version`** - 只更新 package.json 版本，不创建 git tag
+6. **版本号递增** - 如果版本已存在，需要先执行 `npm version patch`
+7. **npm 源** - 确保是官方源 `https://registry.npmjs.org/`
 
 ## 常见错误处理
 
 | 错误码 | 原因 | 解决 |
 |--------|------|------|
-| E401/UNAUTHENTICATED | 未登录或登录过期 | 执行 `npm login` 重新登录 |
+| E401/UNAUTHENTICATED | 未登录或 token 过期 | 先 `npm logout`，再 `npm login` |
 | EOTP | 需要一次性验证码 | 询问用户 OTP 后加 `--otp` 参数重试 |
 | E403 | 版本已发布 | 执行 `npm version patch` 升级版本号后重试 |
 | ENOWORKSPACES | workspace 项目 | 添加 `--no-workspaces` 参数 |
+| "Access token expired" | token 过期 | 先 `npm logout`，再 `npm login` |
+
+## 自动处理登录过期
+
+当执行任何 npm 命令时，如果遇到登录过期：
+1. 检测到过期信息（包含 "expired"、"revoked"、"401"、"UNAUTHENTICATED"）
+2. 自动执行 `npm logout` 清除过期凭据
+3. 提示用户执行 `npm login` 重新登录
+4. 登录成功后继续执行原流程
