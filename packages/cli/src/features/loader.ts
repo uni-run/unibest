@@ -59,7 +59,7 @@ export async function loadFeatureSchema(featureName: string): Promise<Record<str
  * 加载 Feature hooks
  */
 export async function loadFeatureHooks(featureName: string): Promise<FeatureContext['options'] | null> {
-  const hooksPath = path.join(FEATURES_DIR, featureName, 'hooks.ts')
+  const hooksPath = path.join(FEATURES_DIR, featureName, 'hooks.js')
 
   if (!fs.existsSync(hooksPath)) {
     return null
