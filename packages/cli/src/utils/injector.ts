@@ -166,12 +166,17 @@ export async function injectLogin(projectPath: string): Promise<InjectResult[]> 
     'login/files/src/router/interceptor.ts'
   ))
 
-  // 创建 login 相关文件
+  // 替换 router/config.ts
+  results.push(injector.replaceFile(
+    'src/router/config.ts',
+    'login/files/src/router/config.ts'
+  ))
+
+  // 创建 login 专用文件
   const loginFiles = [
     'src/pages-auth/login.vue',
     'src/pages-auth/register.vue',
     'src/pages-auth/README.md',
-    'src/router/config.ts',
   ]
 
   for (const file of loginFiles) {
