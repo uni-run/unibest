@@ -110,17 +110,45 @@ export async function injectI18n(projectPath: string): Promise<InjectResult[]> {
     `  app.use(i18n)`
   ))
 
-  // 创建 locale 目录文件
-  const localeFiles = [
+  // 完整替换需要修改的文件
+  results.push(injector.replaceFile(
+    'src/tabbar/config.ts',
+    'i18n/files/src/tabbar/config.ts'
+  ))
+
+  results.push(injector.replaceFile(
+    'src/tabbar/index.vue',
+    'i18n/files/src/tabbar/index.vue'
+  ))
+
+  results.push(injector.replaceFile(
+    'src/tabbar/TabbarItem.vue',
+    'i18n/files/src/tabbar/TabbarItem.vue'
+  ))
+
+  results.push(injector.replaceFile(
+    'src/utils/index.ts',
+    'i18n/files/src/utils/index.ts'
+  ))
+
+  results.push(injector.replaceFile(
+    'src/store/token.ts',
+    'i18n/files/src/store/token.ts'
+  ))
+
+  // 复制 i18n 专用文件
+  const i18nFiles = [
     'src/locale/index.ts',
     'src/locale/en.json',
     'src/locale/zh-Hans.json',
     'src/locale/README.md',
     'src/utils/i18n.ts',
     'src/types/i18n.d.ts',
+    'src/tabbar/i18n.ts',
+    'src/pages/i18n/index.vue',
   ]
 
-  for (const file of localeFiles) {
+  for (const file of i18nFiles) {
     const featurePath = `i18n/files/${file}`
     results.push(injector.createFile(file, featurePath))
   }
