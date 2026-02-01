@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-const FEATURES_PATH = path.join(__dirname, '..', '..', 'features')
+const FEATURES_PATH = path.join(__dirname, '..', 'features')
 
 export interface InjectResult {
   success: boolean
