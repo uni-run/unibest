@@ -1,0 +1,116 @@
+{
+  "name": "npm-publish",
+  "description": "Publish npm package with OTP authentication. Handles login check, version bump, build, and publish with optional OTP.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "packagePath": {
+        "type": "string",
+        "description": "Path to the npm package directory (absolute path)"
+      },
+      "versionBump": {
+        "type": "string",
+        "enum": ["patch", "minor", "major"],
+        "default": "patch",
+        "description": "Version bump type: patch, minor, or major"
+      },
+      "skipLoginCheck": {
+        "type": "boolean",
+        "default": false,
+        "description": "Skip login check and assume already logged in"
+      }
+    },
+    "required": ["packagePath"]
+  },
+  "workflow": [
+    {
+      "step": "check_login",
+      "command": "cd {{packagePath}} && npm whoami",
+      "onSuccess": "bump_version",
+      "onError": "login",
+      "errorMessage": "Not logged in, need to login first"
+    },
+    {
+      "step": "login",
+      "command": "cd {{packagePath}} && npm login",
+      "prompt": ["Enter npm username:", "Enter npm password:", "Enter npm OTP (from email/authenticator):"],
+      "onSuccess": "bump_version",
+      "description": "Interactive npm login, requires user to provide credentials and OTP"
+    },
+    {
+      "step": "bump_version",
+      "command": "cd {{packagePath}} && npm version {{versionBump}} --no-git-tag-version",
+      "onSuccess": "build",
+      "description": "Bump package version"
+    },
+    {
+      "step": "build",
+      "command": "cd {{packagePath}} && pnpm build",
+      "onSuccess": "publish",
+      "description": "Build the project using pnpm"
+    },
+    {
+      "step": "publish",
+      "command": "cd {{packagePath}} && npm publish --no-workspaces",
+      "onSuccess": "done",
+      "onError": "handle_otp_or_version_error",
+      "description": "Publish to npm registry"
+    },
+    {
+      "step": "handle_otp_or_version_error",
+      "command": "echo \"{{error}}\"",
+      "onCondition": {
+        "EOTP": "ask_otp",
+        "E403": "bump_version",
+        "default": "fail"
+      },
+      "description": "Check error type and handle accordingly"
+    },
+    {
+      "step": "ask_otp",
+      "prompt": "Enter OTP code from your authenticator app or email:",
+      "onResponse": "publish_with_otp",
+      "description": "Ask user for OTP code"
+    },
+    {
+      "step": "publish_with_otp",
+      "command": "cd {{packagePath}} && npm publish --no-workspaces --otp={{otp}}",
+      "onSuccess": "done",
+      "onError": "ask_otp",
+      "description": "Retry publish with OTP code"
+    },
+    {
+      "step": "done",
+      "command": "echo \"✅ Package published successfully!\"",
+      "description": "Publication completed successfully"
+    },
+    {
+      "step": "fail",
+      "command": "echo \"❌ Publish failed: {{error}}\"",
+      "description": "Publication failed with unknown error"
+    }
+  ],
+  "examples": [
+    {
+      "description": "Publish a monorepo package",
+      "input": {
+        "packagePath": "/path/to/monorepo/packages/my-lib",
+        "versionBump": "patch"
+      }
+    },
+    {
+      "description": "Publish with minor version bump",
+      "input": {
+        "packagePath": "/path/to/my-package",
+        "versionBump": "minor"
+      }
+    }
+  ],
+  "notes": [
+    "Always use absolute paths for packagePath",
+    "The --no-workspaces flag is required for monorepo packages",
+    "The --no-git-tag-version flag prevents creating git tags",
+    "If login fails with 401, re-run from check_login step",
+    "OTP codes expire quickly, ask for it just before needed"
+  ]
+}
