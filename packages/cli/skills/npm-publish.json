@@ -32,10 +32,9 @@
     },
     {
       "step": "handle_login_error",
-      "command": "npm logout",
+      "command": "echo \"Token expired, please login again\"",
       "onSuccess": "login",
-      "onError": "login",
-      "description": "Logout to clear expired credentials"
+      "description": "Token expired, need to login"
     },
     {
       "step": "login",
