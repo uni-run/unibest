@@ -68,9 +68,11 @@
 unibest/                    # 主仓库（main 分支）
 ├── packages/
 │   └── cli/                # CLI 脚手架工具（发布到 npm）
-├── src/                    # 模板源码
+├── src/                    # 模板源码（同base分支）
 └── 其他配置文件
 ```
+
+> cli 会从 base 分支拉取基础代码。
 
 ### 用户项目结构（创建项目后）
 
@@ -99,21 +101,7 @@ my-project/                 # 用户项目
 
 ## 📦 使用方式
 
-### 方式一：直接克隆开发（推荐）
-
-```bash
-# 克隆本仓库作为基础模板
-git clone https://github.com/unibest-tech/unibest.git my-project
-cd my-project
-
-# 安装依赖并运行
-pnpm install
-pnpm dev        # 运行 H5
-pnpm dev:mp     # 运行微信小程序
-pnpm dev:app    # 运行 App
-```
-
-### 方式二：通过 CLI 创建新项目
+### 方式一：通过 CLI 创建新项目（推荐）
 
 ```bash
 # 全局安装 CLI
@@ -127,7 +115,7 @@ pnpm install
 pnpm dev
 ```
 
-### 方式三：创建时选择 Feature
+### 方式二：创建时选择 Feature
 
 ```bash
 # 创建项目并选择功能
@@ -137,7 +125,7 @@ pnpm create unibest my-project
 pnpm create unibest my-project --i18n --login
 ```
 
-### 方式四：创建后添加 Feature
+### 方式三：创建后添加 Feature
 
 ```bash
 cd my-project
@@ -150,6 +138,20 @@ pnpm create unibest add login
 
 # 同时添加多个
 pnpm create unibest add i18n login
+```
+
+### 方式四：直接克隆开发（备选）
+
+```bash
+# 克隆本仓库作为基础模板
+git clone https://github.com/unibest-tech/unibest.git my-project
+cd my-project
+
+# 安装依赖并运行
+pnpm install
+pnpm dev        # 运行 H5
+pnpm dev:mp     # 运行微信小程序
+pnpm dev:app    # 运行 App
 ```
 
 ## 📦 运行（支持热更新）
