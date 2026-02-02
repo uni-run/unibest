@@ -1,11 +1,11 @@
 <p align="center">
-  <a href="https://github.com/unibest-tech/unibest">
+  <a href="https://github.com/feige996/unibest">
     <img width="160" src="./src/static/logo.svg">
   </a>
 </p>
 
 <h1 align="center">
-  <a href="https://github.com/unibest-tech/unibest" target="_blank">unibest - 最好的 uniapp 开发框架</a>
+  <a href="https://github.com/feige996/unibest" target="_blank">unibest - 最好的 uniapp 开发框架</a>
 </h1>
 
 <div align="center">
@@ -144,7 +144,7 @@ pnpm create unibest add i18n login
 
 ```bash
 # 克隆本仓库作为基础模板
-git clone https://github.com/unibest-tech/unibest.git my-project
+git clone https://github.com/feige996/unibest.git my-project
 cd my-project
 
 # 安装依赖并运行
