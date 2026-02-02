@@ -30,5 +30,22 @@
   "vueCompilerOptions": {
     "plugins": ["@uni-helper/uni-types/volar-plugin"]
   },
-  "exclude": ["node_modules", "dist", "eslint.config.mjs"]
+  "include": [
+    "package.json",
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.jsx",
+    "src/**/*.vue",
+    "src/**/*.json",
+    "vite.config.ts",
+    "pages.config.ts",
+    "manifest.config.ts",
+    "uno.config.ts",
+    "openapi-ts-request.config.ts",
+    "scripts/**/*.js",
+    "vite-plugins/**/*.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
 }
