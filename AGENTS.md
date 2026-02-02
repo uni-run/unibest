@@ -4,6 +4,18 @@
 
 uniapp + Vue3 + TypeScript + Vite5 + UnoCSS template. Supports H5, WeChat Mini Program, App (Android/iOS/HarmonyOS).
 
+## Architecture
+
+```
+unibest 仓库 (refactor/monorepo 分支)
+└── packages/cli/           # CLI 脚手架工具
+    └── 用户执行 pnpm create unibest 时，从 Git base 分支克隆模板
+```
+
+**模板来源：**
+- 用户创建项目时，从 `https://gitee.com/feige996/unibest.git` 的 `base` 分支克隆
+- CLI 工具本身不包含模板代码
+
 ## Essential Commands
 
 ```bash
