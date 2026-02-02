@@ -60,17 +60,61 @@
 - Vue Official>=2.1.10
 - TypeScript>=5.0
 
-## 新版分支 
-- main == base
-- base --> base-i18n
-- base-login --> base-login-i18n
+## 🏗️ Monorepo 架构
+
+unibest 采用 Monorepo 架构设计，将基础模板与 Feature 分离：
+
+```
+unibest/                    # 主仓库
+├── packages/
+│   ├── cli/                # CLI 脚手架工具
+│   └── template-base/      # 基础模板（从 Git base 分支克隆）
+└── features/
+    ├── i18n/               # 多语言 Feature
+    └── login/              # 登录策略 Feature
+```
+
+### Feature 机制
+
+- **基础模板**：包含核心功能，从 Git base 分支克隆
+- **Feature 注入**：通过 CLI 命令动态注入 i18n、login 等功能
+- **灵活组合**：创建项目时可选择需要的功能，也可后续添加
 
 ## &#x1F4C2; 快速开始
 
-执行 `pnpm create unibest` 创建项目
-执行 `pnpm i` 安装依赖
-执行 `pnpm dev` 运行 `H5`
-执行 `pnpm dev:mp` 运行 `微信小程序`
+### 方式一：创建时选择 Feature
+
+```bash
+# 创建项目并选择功能
+pnpm create unibest my-project
+
+# 或通过命令行参数直接指定
+pnpm create unibest my-project --i18n --login
+```
+
+### 方式二：创建后添加 Feature
+
+```bash
+cd my-project
+
+# 添加多语言
+pnpm create unibest add i18n
+
+# 添加登录策略
+pnpm create unibest add login
+
+# 同时添加多个
+pnpm create unibest add i18n login
+```
+
+### 运行项目
+
+```bash
+pnpm i
+pnpm dev        # 运行 H5
+pnpm dev:mp     # 运行微信小程序
+pnpm dev:app    # 运行 App
+```
 
 ## 📦 运行（支持热更新）
 
