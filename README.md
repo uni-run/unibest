@@ -56,33 +56,63 @@
 ## ⚙️ 环境
 
 - node>=18
-- pnpm>=7.30
-- Vue Official>=2.1.10
+- pnpm>=9
+- Vue Official>=3.4
 - TypeScript>=5.0
 
-## 🏗️ Monorepo 架构
-
-unibest 采用 Monorepo 架构设计，将基础模板与 Feature 分离：
+## 🏗️ 项目结构
 
 ```
-unibest/                    # 主仓库
+unibest/                    # 主仓库（main 分支）
 ├── packages/
-│   ├── cli/                # CLI 脚手架工具
-│   └── template-base/      # 基础模板（从 Git base 分支克隆）
-└── features/
-    ├── i18n/               # 多语言 Feature
-    └── login/              # 登录策略 Feature
+│   └── cli/                # CLI 脚手架工具（发布到 npm）
+├── src/                    # 基础模板源码
+├── docs/                   # 项目文档
+└── 其他配置文件
 ```
 
-### Feature 机制
+### 双重用途
 
-- **基础模板**：包含核心功能，从 Git base 分支克隆
-- **Feature 注入**：通过 CLI 命令动态注入 i18n、login 等功能
-- **灵活组合**：创建项目时可选择需要的功能，也可后续添加
+本仓库既是**基础模板**，也是 **CLI 脚手架**的源码仓库：
 
-## &#x1F4C2; 快速开始
+- **作为模板**：直接克隆 `git clone` 后即可开发
+- **作为 CLI**：通过 `pnpm create unibest` 创建新项目
 
-### 方式一：创建时选择 Feature
+### CLI 发布
+
+`packages/cli/` 目录会发布到 npm 包 `create-unibest`，用户安装后从 Git main 分支克隆模板。
+
+## 📦 使用方式
+
+### 方式一：直接克隆开发（推荐）
+
+```bash
+# 克隆本仓库作为基础模板
+git clone https://github.com/unibest-tech/unibest.git my-project
+cd my-project
+
+# 安装依赖并运行
+pnpm install
+pnpm dev        # 运行 H5
+pnpm dev:mp     # 运行微信小程序
+pnpm dev:app    # 运行 App
+```
+
+### 方式二：通过 CLI 创建新项目
+
+```bash
+# 全局安装 CLI
+pnpm add -g create-unibest
+
+# 创建项目（从 main 分支克隆模板）
+pnpm create unibest my-project
+cd my-project
+
+pnpm install
+pnpm dev
+```
+
+### 方式三：创建时选择 Feature
 
 ```bash
 # 创建项目并选择功能
@@ -92,7 +122,7 @@ pnpm create unibest my-project
 pnpm create unibest my-project --i18n --login
 ```
 
-### 方式二：创建后添加 Feature
+### 方式四：创建后添加 Feature
 
 ```bash
 cd my-project
@@ -105,15 +135,6 @@ pnpm create unibest add login
 
 # 同时添加多个
 pnpm create unibest add i18n login
-```
-
-### 运行项目
-
-```bash
-pnpm i
-pnpm dev        # 运行 H5
-pnpm dev:mp     # 运行微信小程序
-pnpm dev:app    # 运行 App
 ```
 
 ## 📦 运行（支持热更新）
