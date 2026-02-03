@@ -24,6 +24,7 @@ import UnoCSS from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import { defineConfig, loadEnv } from 'vite'
 import ViteRestart from 'vite-plugin-restart'
+import VueDevTools from 'vite-plugin-vue-devtools'
 import openDevTools from './scripts/open-dev-tools'
 import { createCopyNativeResourcesPlugin } from './vite-plugins/copy-native-resources'
 import syncManifestPlugin from './vite-plugins/sync-manifest-plugins'
@@ -121,11 +122,14 @@ export default defineConfig(({ command, mode }) => {
         // 通过这个插件，在修改vite.config.js文件则不需要重新运行也生效配置
         restart: ['vite.config.js'],
       }),
+      VueDevTools(),
       // h5环境增加 BUILD_TIME 和 BUILD_BRANCH
       UNI_PLATFORM === 'h5' && {
         name: 'html-transform',
         transformIndexHtml(html) {
-          return html.replace('%BUILD_TIME%', dayjs().format('YYYY-MM-DD HH:mm:ss')).replace('%VITE_APP_TITLE%', VITE_APP_TITLE)
+          return html
+            .replace('%BUILD_TIME%', dayjs().format('YYYY-MM-DD HH:mm:ss'))
+            .replace('%VITE_APP_TITLE%', VITE_APP_TITLE)
         },
       },
       // 打包分析插件，h5 + 生产环境才弹出
@@ -179,7 +183,8 @@ export default defineConfig(({ command, mode }) => {
               target: VITE_SERVER_BASEURL,
               changeOrigin: true,
               // 后端有/api前缀则不做处理，没有则需要去掉
-              rewrite: path => path.replace(new RegExp(`^${VITE_APP_PROXY_PREFIX}`), ''),
+              rewrite: path =>
+                path.replace(new RegExp(`^${VITE_APP_PROXY_PREFIX}`), ''),
             },
           }
         : undefined,
