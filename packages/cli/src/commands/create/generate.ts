@@ -80,12 +80,12 @@ export async function generateProject(options: PromptResult) {
 
   try {
     log.success(`项目${projectName}创建成功！`)
-    console.log('下一步:')
-    console.log(`  cd ${projectName}`)
-    console.log('  pnpm i')
-    console.log('  pnpm dev')
-    console.log('  运行完以上命令后，再运行其他平台')
-    console.log('  如：pnpm dev:mp, pnpm dev:app 等')
+    logger.info('下一步:')
+    logger.info(`  cd ${projectName}`)
+    logger.info('  pnpm i')
+    logger.info('  pnpm dev')
+    logger.info('  运行完以上命令后，再运行其他平台')
+    logger.info('  如：pnpm dev:mp, pnpm dev:app 等')
   }
   catch (error) {
     logger.error(`生成项目失败: ${(error as Error).message}`)
