@@ -54,25 +54,32 @@ pnpm create unibest add i18n --force
 
 ### 创建项目参数
 
-| 参数 | 说明 |
-|------|------|
-| `-p, --platform` | 平台类型，支持 `h5`, `mp-weixin`, `app`, `mp-alipay`, `mp-toutiao` |
-| `-u, --ui` | UI 库，支持 `none`, `wot-ui`, `uview-pro`, `sard-uniapp`, `uv-ui`, `uview-plus` |
-| `-l, --login` | 启用登录策略 |
-| `-i, --i18n` | 启用多语言 |
+| 参数             | 说明                                                                            |
+| ---------------- | ------------------------------------------------------------------------------- |
+| `-p, --platform` | 平台类型，支持 `h5`, `mp-weixin`, `app`, `mp-alipay`, `mp-toutiao`              |
+| `-u, --ui`       | UI 库，支持 `none`, `wot-ui`, `uview-pro`, `sard-uniapp`, `uv-ui`, `uview-plus` |
+| `-l, --login`    | 启用登录策略                                                                    |
+| `-i, --i18n`     | 启用多语言                                                                      |
 
 ### 添加 Feature 参数
 
-| 参数 | 说明 |
-|------|------|
-| `--path` | 项目路径，默认当前目录 |
-| `--force` | 强制重新注入 Feature |
+| 参数      | 说明                   |
+| --------- | ---------------------- |
+| `--path`  | 项目路径，默认当前目录 |
+| `--force` | 强制重新注入 Feature   |
 
 ## 与 unibest 模板版本对应关系
 
 | create-unibest 版本 | unibest 模板版本 |
-|---------------------|------------------|
-| 4.0.0 | 4.3.0+ |
+| ------------------- | ---------------- |
+| 4.0.0               | 4.3.0+           |
+
+## 发布npm
+
+```sh
+npm login --registry=https://registry.npmjs.org
+npm publish --no-workspaces --registry=https://registry.npmjs.org
+```
 
 ## License
 
