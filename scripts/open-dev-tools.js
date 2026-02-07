@@ -9,9 +9,9 @@ import process from 'node:process'
  */
 function _openDevTools(env = 'dev') {
   const platform = process.platform // darwin, win32, linux
-  const { UNI_PLATFORM } = process.env //  mp-weixin, mp-alipay
+  const { UNI_PLATFORM } = process.env //  mp-weixin, mp-alipay, mp-lark
 
-  const uniPlatformText = UNI_PLATFORM === 'mp-weixin' ? '微信小程序' : UNI_PLATFORM === 'mp-alipay' ? '支付宝小程序' : '小程序'
+  const uniPlatformText = UNI_PLATFORM === 'mp-weixin' ? '微信小程序' : UNI_PLATFORM === 'mp-alipay' ? '支付宝小程序' : UNI_PLATFORM === 'mp-lark' ? '抖音小程序' : '小程序'
 
   // 项目路径（构建输出目录），根据环境选择不同目录
   const outputDir = env === 'build' ? `dist/build/${UNI_PLATFORM}` : `dist/dev/${UNI_PLATFORM}`
@@ -35,6 +35,9 @@ function _openDevTools(env = 'dev') {
     }
     else if (UNI_PLATFORM === 'mp-alipay') {
       command = `/Applications/小程序开发者工具.app/Contents/MacOS/小程序开发者工具 --p "${projectPath}"`
+    }
+    else if (UNI_PLATFORM === 'mp-lark') {
+      command = `/Applications/抖音开发者工具.app/Contents/MacOS/抖音开发者工具 --p "${projectPath}"`
     }
   }
   else if (platform === 'win32' || platform === 'win64') {
