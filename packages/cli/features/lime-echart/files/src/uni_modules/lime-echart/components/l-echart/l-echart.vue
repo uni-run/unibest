@@ -69,7 +69,7 @@ const echartsObj = {}
  * LimeChart 图表
  * @description 全端兼容的eCharts
  * @tutorial https://ext.dcloud.net.cn/plugin?id=4899
- *
+
  * @property {String} customStyle 自定义样式
  * @property {String} type 指定 canvas 类型
  * @value 2d 使用canvas 2d，部分小程序支持
@@ -78,7 +78,7 @@ const echartsObj = {}
  * @property {Boolean} isDisableScroll	 
  * @property {number} beforeDelay = [30]  延迟初始化 (毫秒)
  * @property {Boolean} enableHover PC端使用鼠标悬浮
- *
+
  * @event {Function} finished 加载完成触发
  */
 export default {
