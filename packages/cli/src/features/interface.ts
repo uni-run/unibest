@@ -52,6 +52,19 @@ export const AVAILABLE_FEATURES: FeatureDefinition[] = [
     name: 'login',
     description: '登录策略（黑白名单、登录拦截等）',
     dependencies: {}
+  },
+  {
+    name: 'lime-echart',
+    description: 'lime-echart 图表库',
+    dependencies: {
+      echarts: '^5.4.1',
+      zrender: '^5.4.3'
+    }
+  },
+  {
+    name: 'ucharts',
+    description: 'uCharts 图表库',
+    dependencies: {}
   }
 ]
 
@@ -75,6 +88,11 @@ export function getSelectedFeatures(options: PromptResult): FeatureDefinition[] 
   
   if (options.loginStrategy) {
     const feature = getFeatureByName('login')
+    if (feature) features.push(feature)
+  }
+
+  for (const library of options.chartLibraries || []) {
+    const feature = getFeatureByName(library)
     if (feature) features.push(feature)
   }
   

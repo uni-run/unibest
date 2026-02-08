@@ -13,6 +13,9 @@ export type FormatPlugin = 'oxclint' | 'eslint'
 /** 支持的token策略类型 */
 export type TokenStrategy = 'double-token' | 'single-token'
 
+/** 支持的图表库类型 */
+export type ChartLibrary = 'lime-echart' | 'ucharts'
+
 /** 交互式询问结果 */
 export interface PromptResult {
   projectName: string
@@ -21,6 +24,7 @@ export interface PromptResult {
   requestLibrary?: RequestLibrary
   i18n: boolean
   loginStrategy: boolean
+  chartLibraries: ChartLibrary[]
   tokenStrategy?: TokenStrategy
   formatPlugin?: FormatPlugin
 }

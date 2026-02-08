@@ -7,7 +7,7 @@ import { bold, green } from 'kolorist'
 import { version } from '../../package.json'
 import { getFeatureByName } from '../features/interface'
 import { getAvailableFeatureNames, loadFeatureHooks } from '../features/loader'
-import { injectI18n, injectLogin } from '../utils/injector'
+import { injectI18n, injectLogin, injectLimeEchart, injectUcharts } from '../utils/injector'
 import { logger } from '../utils/logger'
 import { readPackageJson, writePackageJson } from '../utils/readPackageJson'
 
@@ -29,10 +29,12 @@ function getFeatureStatusFromPackageJson(pkgPath: string): Record<string, boolea
     return {
       i18n: pkg.unibest?.i18n === true,
       login: pkg.unibest?.loginStrategy === true,
+      'lime-echart': pkg.unibest?.charts?.limeEchart === true,
+      ucharts: pkg.unibest?.charts?.ucharts === true,
     }
   }
   catch {
-    return { i18n: false, login: false }
+    return { i18n: false, login: false, 'lime-echart': false, ucharts: false }
   }
 }
 
@@ -50,6 +52,18 @@ function updatePackageJsonForFeature(pkgPath: string, featureName: string): void
     case 'login':
       pkg.unibest.loginStrategy = true
       break
+    case 'lime-echart':
+      pkg.unibest.charts = {
+        ...pkg.unibest.charts,
+        limeEchart: true,
+      }
+      break
+    case 'ucharts':
+      pkg.unibest.charts = {
+        ...pkg.unibest.charts,
+        ucharts: true,
+      }
+      break
   }
 
   writePackageJson(pkgPath, pkg)
@@ -62,6 +76,8 @@ async function checkFeatureStatus(projectPath: string): Promise<FeatureStatus[]>
   return [
     { name: 'i18n', enabled: statusFromPkg.i18n },
     { name: 'login', enabled: statusFromPkg.login },
+    { name: 'lime-echart', enabled: statusFromPkg['lime-echart'] },
+    { name: 'ucharts', enabled: statusFromPkg.ucharts },
   ]
 }
 
@@ -87,6 +103,12 @@ async function addFeature(
   else if (featureName === 'login' && pkg.unibest?.loginStrategy === true) {
     alreadyAdded = true
   }
+  else if (featureName === 'lime-echart' && pkg.unibest?.charts?.limeEchart === true) {
+    alreadyAdded = true
+  }
+  else if (featureName === 'ucharts' && pkg.unibest?.charts?.ucharts === true) {
+    alreadyAdded = true
+  }
 
   if (alreadyAdded && !options.force) {
     logger.warn(`Feature ${featureName} 已添加过，如需重新注入请使用 --force 参数`)
@@ -104,6 +126,12 @@ async function addFeature(
         break
       case 'login':
         results = await injectLogin(projectPath)
+        break
+      case 'lime-echart':
+        results = await injectLimeEchart(projectPath)
+        break
+      case 'ucharts':
+        results = await injectUcharts(projectPath)
         break
       default:
         logger.error(`不支持的 Feature: ${featureName}`)

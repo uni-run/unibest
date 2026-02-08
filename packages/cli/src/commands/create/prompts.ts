@@ -1,6 +1,6 @@
 import { text, multiselect, select, confirm, cancel, isCancel } from '@clack/prompts'
 import { logger } from '../../utils/logger'
-import type { PromptResult, Platform, UILibrary, RequestLibrary, FormatPlugin, TokenStrategy } from '../../types'
+import type { PromptResult, Platform, UILibrary, RequestLibrary, FormatPlugin, TokenStrategy, ChartLibrary } from '../../types'
 import { checkProjectNameExistAndValidate } from '../../utils/validate'
 import { green, red } from 'kolorist'
 import process from 'node:process'
@@ -8,6 +8,7 @@ import process from 'node:process'
 // 定义常量以便复用和校验
 const VALID_PLATFORMS = ['h5', 'mp-weixin', 'app', 'mp-alipay', 'mp-toutiao']
 const VALID_UI_LIBRARIES = ['none', 'wot-ui', 'uview-pro', 'sard-uniapp', 'uv-ui', 'uview-plus']
+const VALID_CHART_LIBRARIES = ['lime-echart', 'ucharts']
 
 /**
  * 交互式询问用户项目配置
@@ -21,6 +22,7 @@ export async function promptUser(projectName?: string, argv: Record<string, any>
   let uiLibrary: UILibrary | undefined
   let loginStrategy: boolean | undefined
   let i18n: boolean | undefined
+  let chartLibraries: ChartLibrary[] | undefined
 
   // 1. 解析 Platform
   const platformArg = argv.p || argv.platform
@@ -70,6 +72,24 @@ export async function promptUser(projectName?: string, argv: Record<string, any>
    } else if (i18nArg === false || i18nArg === 'false') {
      i18n = false
    }
+
+  // 5. 解析图表库
+  const chartArgs: ChartLibrary[] = []
+  if (argv['lime-echart'] === true || argv['lime-echart'] === 'true') {
+    chartArgs.push('lime-echart')
+  }
+  if (argv.ucharts === true || argv.ucharts === 'true' || argv.uchart === true || argv.uchart === 'true') {
+    chartArgs.push('ucharts')
+  }
+  if (chartArgs.length > 0) {
+    const invalidCharts = chartArgs.filter(c => !VALID_CHART_LIBRARIES.includes(c))
+    if (invalidCharts.length > 0) {
+      console.error(red(`无效的图表库参数: ${invalidCharts.join(', ')}`))
+      console.error(red(`可选值: ${VALID_CHART_LIBRARIES.join(', ')}`))
+      process.exit(1)
+    }
+    chartLibraries = Array.from(new Set(chartArgs))
+  }
 
   try {
     // 1. 项目名称（如果未通过命令行提供）
@@ -170,7 +190,26 @@ export async function promptUser(projectName?: string, argv: Record<string, any>
       i18n = selectedI18n as boolean
     }
 
-    // 6. 选择请求库（单选）
+    // 6. 选择图表库（多选）
+    if (!chartLibraries) {
+      const selectedCharts = await multiselect({
+        message: `请选择需要的图表库（多选）${green('[默认会生成 pages-demo 示例页面]')}`,
+        options: [
+          { value: 'lime-echart', label: 'lime-echart' },
+          { value: 'ucharts', label: 'ucharts' },
+        ],
+        required: false,
+      })
+
+      if (isCancel(selectedCharts)) {
+        cancel('操作已取消')
+        process.exit(0)
+      }
+
+      chartLibraries = (selectedCharts as ChartLibrary[]) || []
+    }
+
+    // 7. 选择请求库（单选）
     // const requestLibrary = await select({
     //   message: `请选择请求库${green('[菲鸽封装的基本就够用了，除非您想用或会用 alovajs]')}`,
     //   options: [
@@ -224,6 +263,7 @@ export async function promptUser(projectName?: string, argv: Record<string, any>
       uiLibrary: uiLibrary as UILibrary,
       loginStrategy,
       i18n,
+      chartLibraries: chartLibraries || [],
       // requestLibrary: requestLibrary as RequestLibrary,
       // tokenStrategy: tokenStrategy as TokenStrategy,
       // formatPlugin: formatPlugin as FormatPlugin,
