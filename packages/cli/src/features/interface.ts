@@ -45,27 +45,27 @@ export const AVAILABLE_FEATURES: FeatureDefinition[] = [
     description: '多语言支持',
     dependencies: {
       'vue-i18n': '^9.0.0',
-      'dayjs': '^1.11.0'
-    }
+      'dayjs': '^1.11.0',
+    },
   },
   {
     name: 'login',
     description: '登录策略（黑白名单、登录拦截等）',
-    dependencies: {}
+    dependencies: {},
   },
   {
     name: 'lime-echart',
     description: 'lime-echart 图表库',
     dependencies: {
-      echarts: '^5.4.1',
-      zrender: '^5.4.3'
-    }
+      'echarts': '^5.4.1',
+      'lodash-es': '^4.17.21',
+    },
   },
   {
     name: 'ucharts',
     description: 'uCharts 图表库',
-    dependencies: {}
-  }
+    dependencies: {},
+  },
 ]
 
 /**
@@ -80,21 +80,24 @@ export function getFeatureByName(name: string): FeatureDefinition | undefined {
  */
 export function getSelectedFeatures(options: PromptResult): FeatureDefinition[] {
   const features: FeatureDefinition[] = []
-  
+
   if (options.i18n) {
     const feature = getFeatureByName('i18n')
-    if (feature) features.push(feature)
+    if (feature)
+      features.push(feature)
   }
-  
+
   if (options.loginStrategy) {
     const feature = getFeatureByName('login')
-    if (feature) features.push(feature)
+    if (feature)
+      features.push(feature)
   }
 
   for (const library of options.chartLibraries || []) {
     const feature = getFeatureByName(library)
-    if (feature) features.push(feature)
+    if (feature)
+      features.push(feature)
   }
-  
+
   return features
 }

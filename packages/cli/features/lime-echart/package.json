@@ -4,6 +4,6 @@
   "description": "unibest lime-echart feature",
   "dependencies": {
     "echarts": "^5.4.1",
-    "zrender": "^5.4.3"
+    "lodash-es": "^4.17.21"
   }
 }
