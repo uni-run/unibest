@@ -1,20 +1,11 @@
-import type {
-  PageMetaDatum,
-  SubPackages,
-} from '@uni-helper/vite-plugin-uni-pages'
+/* eslint-disable style/indent */
+import type { PageMetaDatum, SubPackages } from '@uni-helper/vite-plugin-uni-pages'
 /** 如果是运行抖音小程序，就不引入 @uni-helper/uni-env，否则运行报错（找不到process) */
 import { isMpWeixin } from '@uni-helper/uni-env'
 
-import pagesJson from '@/pages.json'
+import { pages, subPackages } from '@/pages.json'
 
-const { pages, subPackages = [] } = pagesJson as {
-  pages: PageMetaDatum[]
-  subPackages: SubPackages
-}
-
-export type PageInstance = Page.PageInstance<AnyObject, object> & {
-  $page: Page.PageInstance<AnyObject, object> & { fullPath: string }
-}
+export type PageInstance = Page.PageInstance<AnyObject, object> & { $page: Page.PageInstance<AnyObject, object> & { fullPath: string } }
 
 export function getLastPage() {
   // getCurrentPages() 至少有1个元素，所以不再额外判断
@@ -94,19 +85,19 @@ export function getAllPages(key?: string) {
     }))
 
   // 这里处理分包
-  const subPages: PageMetaDatum[] = [];
-  (subPackages as SubPackages).forEach((subPageObj) => {
-    // console.log(subPageObj)
-    const { root } = subPageObj
-    subPageObj.pages
-      .filter(page => !key || page[key])
-      .forEach((page) => {
-        subPages.push({
-          ...page,
-          path: `/${root}/${page.path}`,
+  const subPages: PageMetaDatum[] = []
+    ; (subPackages as SubPackages).forEach((subPageObj) => {
+      // console.log(subPageObj)
+      const { root } = subPageObj
+      subPageObj.pages
+        .filter(page => !key || page[key])
+        .forEach((page) => {
+          subPages.push({
+            ...page,
+            path: `/${root}/${page.path}`,
+          })
         })
-      })
-  })
+    })
   const result = [...mainPages, ...subPages]
   // console.log(`getAllPages by ${key} result: `, result)
   return result
@@ -114,14 +105,14 @@ export function getAllPages(key?: string) {
 
 export function getCurrentPageI18nKey() {
   const routeObj = currRoute()
-  const currPage = (pages as PageMetaDatum[]).find(
-    page => `/${page.path}` === routeObj.path,
-  )
+  const currPage = (pages as PageMetaDatum[]).find(page => `/${page.path}` === routeObj.path)
   if (!currPage) {
     console.warn('路由不正确')
     return ''
   }
-  return currPage?.style?.navigationBarTitleText || ''
+  console.log(currPage)
+  console.log(currPage.style.navigationBarTitleText)
+  return currPage.style?.navigationBarTitleText || ''
 }
 
 /**

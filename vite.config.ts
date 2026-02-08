@@ -6,15 +6,16 @@ import UniComponents from '@uni-helper/vite-plugin-uni-components'
 import UniLayouts from '@uni-helper/vite-plugin-uni-layouts'
 // @see https://github.com/uni-helper/vite-plugin-uni-manifest
 import UniManifest from '@uni-helper/vite-plugin-uni-manifest'
+// @see https://uni-helper.js.org/vite-plugin-uni-pages
+import UniPages from '@uni-helper/vite-plugin-uni-pages'
 // @see https://github.com/uni-helper/vite-plugin-uni-platform
+// 需要与 @uni-helper/vite-plugin-uni-pages 插件一起使用
 import UniPlatform from '@uni-helper/vite-plugin-uni-platform'
 /**
  * 分包优化、模块异步跨包调用、组件异步跨包引用
  * @see https://github.com/uni-ku/bundle-optimizer
  */
 import UniOptimization from '@uni-ku/bundle-optimizer'
-import { hookUniPlatform } from '@uni-ku/pages-json/hooks'
-import pagesJson from '@uni-ku/pages-json/vite'
 // https://github.com/uni-ku/root
 import UniKuRoot from '@uni-ku/root'
 import dayjs from 'dayjs'
@@ -73,10 +74,13 @@ export default defineConfig(({ command, mode }) => {
         directoryAsNamespace: false, // 是否把目录名作为命名空间前缀，true 时组件名为 目录名+组件名，
         dts: 'src/types/components.d.ts', // 自动生成的组件类型声明文件路径（用于 TypeScript 支持）
       }),
-      pagesJson({
-        hooks: [hookUniPlatform], // 支持 vite-plugin-uni-platform
-        subPackageDirs: ['pages-sub'],
-      }), // 支持 vite-plugin-uni-platform
+      UniPages({
+        exclude: ['**/components/**/**.*', '**/sections/**/**.*'],
+        // pages 目录为 src/pages，分包目录不能配置在pages目录下！！
+        // 是个数组，可以配置多个，但是不能为pages里面的目录！！
+        subPackages: [],
+        dts: 'src/types/uni-pages.d.ts',
+      }),
       // UniOptimization 插件需要 page.json 文件，故应在 UniPages 插件之后执行
       UniOptimization({
         enable: {
