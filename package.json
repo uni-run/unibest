@@ -93,6 +93,7 @@
     "build:quickapp-webview": "uni build -p quickapp-webview",
     "build:quickapp-webview-huawei": "uni build -p quickapp-webview-huawei",
     "build:quickapp-webview-union": "uni build -p quickapp-webview-union",
+    "upload:mp": "node ./scripts/upload-weixin.js",
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
@@ -163,6 +164,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
     "miniprogram-api-typings": "^4.1.0",
+    "miniprogram-ci": "^2.1.26",
     "openapi-ts-request": "^1.10.0",
     "postcss": "^8.4.49",
     "postcss-html": "^1.8.0",
