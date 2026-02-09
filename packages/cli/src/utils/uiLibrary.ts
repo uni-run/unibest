@@ -1,6 +1,6 @@
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
-import { join } from 'node:path'
 import type { UILibrary } from '../types'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { join } from 'node:path'
 
 /**
  * UI 库配置接口
@@ -33,7 +33,7 @@ export interface UILibraryConfig {
  * UI 库配置映射
  */
 export const UI_LIBRARY_CONFIGS: Record<UILibrary, UILibraryConfig | null> = {
-  none: null,
+  'none': null,
   'wot-ui': {
     packageName: 'wot-design-uni',
     easycom: {
@@ -49,7 +49,7 @@ export const UI_LIBRARY_CONFIGS: Record<UILibrary, UILibraryConfig | null> = {
       path: 'sard-uniapp/components/$1/$1.vue',
     },
     types: ['sard-uniapp/global'],
-    appVueImport: "@import 'sard-uniapp/index.scss';",
+    appVueImport: '@import \'sard-uniapp/index.scss\';',
   },
   'uview-pro': {
     packageName: 'uview-pro',
@@ -58,11 +58,11 @@ export const UI_LIBRARY_CONFIGS: Record<UILibrary, UILibraryConfig | null> = {
       path: 'uview-pro/components/u-$1/u-$1.vue',
     },
     needMainImport: true,
-    mainImport: "import uViewPro from 'uview-pro';",
+    mainImport: 'import uViewPro from \'uview-pro\';',
     needUniScss: true,
-    uniScssImport: "@import 'uview-pro/theme.scss';",
+    uniScssImport: '@import \'uview-pro/theme.scss\';',
     needAppVue: true,
-    appVueImport: "@import 'uview-pro/index.scss';",
+    appVueImport: '@import \'uview-pro/index.scss\';',
   },
   'uv-ui': {
     packageName: '@climblee/uv-ui',
@@ -81,7 +81,7 @@ export const UI_LIBRARY_CONFIGS: Record<UILibrary, UILibraryConfig | null> = {
     },
     types: ['uview-plus/types'],
     needUniScss: true,
-    uniScssImport: "@import 'uview-plus/theme.scss'; // /* 行为相关颜色 */",
+    uniScssImport: '@import \'uview-plus/theme.scss\'; // /* 行为相关颜色 */',
   },
 }
 
@@ -166,13 +166,13 @@ async function updatePackageJson(projectPath: string, packageName: string): Prom
     packageJson.dependencies[packageName] = 'latest'
   }
 
-  writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n')
+  writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`)
 }
 
 /**
  * 更新 pages.config.ts，添加 easycom 配置
  */
-async function updatePagesConfig(projectPath: string, easycom: { pattern: string; path: string }): Promise<void> {
+async function updatePagesConfig(projectPath: string, easycom: { pattern: string, path: string }): Promise<void> {
   const pagesConfigPath = join(projectPath, 'pages.config.ts')
   if (!existsSync(pagesConfigPath)) {
     return
@@ -193,11 +193,11 @@ async function updatePagesConfig(projectPath: string, easycom: { pattern: string
 
   const entry = { pattern: patternLiteral, path: pathLiteral }
 
-  content =
-    addToExistingCustomBlock(content, entry) ??
-    addCustomBlock(content, entry) ??
-    addEasycomBlock(content, entry) ??
-    appendEasycomBlock(content, entry)
+  content
+    = addToExistingCustomBlock(content, entry)
+      ?? addCustomBlock(content, entry)
+      ?? addEasycomBlock(content, entry)
+      ?? appendEasycomBlock(content, entry)
 
   if (content !== originalContent) {
     writeFileSync(pagesConfigPath, ensureTrailingNewline(content))
@@ -231,7 +231,7 @@ async function updateTsConfig(projectPath: string, types: string[]): Promise<voi
     }
   }
 
-  writeFileSync(tsConfigPath, JSON.stringify(tsConfig, null, 2) + '\n')
+  writeFileSync(tsConfigPath, `${JSON.stringify(tsConfig, null, 2)}\n`)
 }
 
 /**
@@ -252,13 +252,14 @@ async function updateMainTs(projectPath: string, importCode: string): Promise<vo
   }
 
   // 查找 import { createSSRApp } from "vue" 的位置
-  const vueImportRegex = /(import\s+.*from\s+['"]vue['"];?\s*\n)/
+  const vueImportRegex = /(import\s+(?:\S.*)?from\s+['"]vue['"];?\s*\n)/
   const match = content.match(vueImportRegex)
 
   if (match) {
     // 在 vue import 之后添加 UI 库引入
     content = content.replace(vueImportRegex, `$1${importCode}\n`)
-  } else {
+  }
+  else {
     // 如果找不到 vue import，在文件开头添加
     content = `${importCode}\n\n${content}`
   }
@@ -326,13 +327,14 @@ async function updateAppVue(projectPath: string, importCode: string): Promise<vo
   }
 
   // 查找 <style> 标签
-  const styleRegex = /(<style[^>]*>)/s
+  const styleRegex = /(<style[^>]*>)/
   const match = content.match(styleRegex)
 
   if (match) {
     // 在 <style> 标签后添加引入
     content = content.replace(styleRegex, `$1\n${importCode}`)
-  } else {
+  }
+  else {
     // 如果没有 style 标签，在文件末尾添加
     content = `${content}\n<style lang="scss">\n${importCode}</style>`
   }
@@ -363,17 +365,17 @@ function addToExistingCustomBlock(content: string, entry: EasycomEntry): string 
 
   const inside = content.slice(braceIndex + 1, closingIndex)
   const hasEntries = inside.trim().length > 0
-  const entryIndent = getLineIndent(content, braceIndex) + '  '
+  const entryIndent = `${getLineIndent(content, braceIndex)}  `
   const entryLine = `${entryIndent}'${entry.pattern}': '${entry.path}',`
 
   if (!hasEntries) {
     const closingIndent = getLineIndent(content, closingIndex)
     return (
-      content.slice(0, braceIndex + 1) +
-      `
+      `${content.slice(0, braceIndex + 1)
+      }
 ${entryLine}
-${closingIndent}` +
-      content.slice(closingIndex)
+${closingIndent}${
+        content.slice(closingIndex)}`
     )
   }
 
@@ -401,8 +403,8 @@ function addCustomBlock(content: string, entry: EasycomEntry): string | null {
   }
 
   const easycomIndent = getLineIndent(content, braceIndex)
-  const customIndent = easycomIndent + '  '
-  const entryIndent = customIndent + '  '
+  const customIndent = `${easycomIndent}  `
+  const entryIndent = `${customIndent}  `
   const customBlock = `${customIndent}custom: {
 ${entryIndent}'${entry.pattern}': '${entry.path}',
 ${customIndent}},`
@@ -430,8 +432,8 @@ function addEasycomBlock(content: string, entry: EasycomEntry): string | null {
     return null
   }
 
-  const blockIndent = getLineIndent(content, braceIndex) + '  '
-  const entryIndent = blockIndent + '  '
+  const blockIndent = `${getLineIndent(content, braceIndex)}  `
+  const entryIndent = `${blockIndent}  `
   const block = `${blockIndent}easycom: {
 ${blockIndent}  autoscan: true,
 ${blockIndent}  custom: {
@@ -464,7 +466,8 @@ function findMatchingBrace(content: string, startIndex: number): number {
     const char = content[i]
     if (char === '{') {
       depth += 1
-    } else if (char === '}') {
+    }
+    else if (char === '}') {
       depth -= 1
       if (depth === 0) {
         return i
@@ -482,7 +485,7 @@ function getLineIndent(content: string, index: number): string {
 }
 
 function escapeSingleQuotes(value: string): string {
-  return value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")
+  return value.replace(/\\/g, '\\\\').replace(/'/g, '\\\'')
 }
 
 function escapeForRegExp(value: string): string {

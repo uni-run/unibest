@@ -1,4 +1,4 @@
-import { readFile } from 'fs/promises'
+import { readFile } from 'node:fs/promises'
 import ejs from 'ejs'
 import { logger } from './logger'
 
@@ -15,7 +15,8 @@ export async function renderTemplate(filePath: string, data: Record<string, any>
       filename: filePath,
       async: true,
     })
-  } catch (error) {
+  }
+  catch (error) {
     logger.error(`渲染模板失败: ${filePath}`)
     throw error
   }

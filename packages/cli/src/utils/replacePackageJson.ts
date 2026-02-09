@@ -1,8 +1,8 @@
+import type { PromptResult } from '../types'
 import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { PromptResult } from '../types'
-import { version as cliVersion } from '../../package.json'
 import dayjs from 'dayjs'
+import { version as cliVersion } from '../../package.json'
 import { getSelectedFeatures } from '../features'
 
 function replaceContent(
@@ -50,7 +50,7 @@ function replaceContent(
   const newContent = {
     name: projectName,
     type: fileContent.type, // 保持 type 在前（如果存在）
-    version: version,
+    version,
     unibest: {
       ...restOptions,
       cliVersion,

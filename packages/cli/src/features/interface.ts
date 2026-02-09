@@ -1,4 +1,4 @@
-import type { PromptResult } from '../../types'
+import type { PromptResult } from '../types'
 
 /**
  * Feature 上下文
@@ -64,7 +64,9 @@ export const AVAILABLE_FEATURES: FeatureDefinition[] = [
   {
     name: 'ucharts',
     description: 'uCharts 图表库',
-    dependencies: {},
+    dependencies: {
+      '@qiun/ucharts': '2.5.0-20230101',
+    },
   },
 ]
 
@@ -78,7 +80,9 @@ export function getFeatureByName(name: string): FeatureDefinition | undefined {
 /**
  * 获取所有选中的 Feature 定义
  */
-export function getSelectedFeatures(options: PromptResult): FeatureDefinition[] {
+export function getSelectedFeatures(
+  options: PromptResult,
+): FeatureDefinition[] {
   const features: FeatureDefinition[] = []
 
   if (options.i18n) {

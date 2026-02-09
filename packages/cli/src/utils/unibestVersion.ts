@@ -1,7 +1,7 @@
+import { promises as fs } from 'node:fs'
+import os from 'node:os'
+import { join } from 'node:path'
 import fetch from 'node-fetch'
-import { promises as fs } from 'fs'
-import { join } from 'path'
-import os from 'os'
 
 /**
  * 仓库文件响应接口（适用于Gitee和GitHub API）
@@ -12,7 +12,7 @@ interface RepoFileResponse {
 }
 
 // 缓存文件路径（兼容旧版本，保留定义但不再使用）
-const getCacheFilePath = (): string => {
+function getCacheFilePath(): string {
   const homeDir = os.homedir()
   const cacheDir = join(homeDir, '.unibest', 'cache')
   return join(cacheDir, 'version.json')
@@ -39,18 +39,22 @@ async function getUnibestVersionFromGitee(): Promise<string | null> {
 
       if (encoding === 'base64') {
         // 使用 Node.js 内置的 Buffer 解码 base64 内容
+        // eslint-disable-next-line node/prefer-global/buffer
         const decodedContent = Buffer.from(content, 'base64').toString('utf8')
         const packageJson = JSON.parse(decodedContent)
         return packageJson.version || null
-      } else {
+      }
+      else {
         // 不支持的编码格式
         return null
       }
-    } else {
+    }
+    else {
       // 请求失败
       return null
     }
-  } catch (error) {
+  }
+  catch (error) {
     // 网络错误或解析错误
     return null
   }
@@ -79,18 +83,22 @@ async function getUnibestVersionFromGithub(): Promise<string | null> {
 
       if (encoding === 'base64') {
         // 使用 Node.js 内置的 Buffer 解码 base64 内容
+        // eslint-disable-next-line node/prefer-global/buffer
         const decodedContent = Buffer.from(content, 'base64').toString('utf8')
         const packageJson = JSON.parse(decodedContent)
         return packageJson.version || null
-      } else {
+      }
+      else {
         // 不支持的编码格式
         return null
       }
-    } else {
+    }
+    else {
       // 请求失败
       return null
     }
-  } catch (error) {
+  }
+  catch (error) {
     // 网络错误或解析错误
     return null
   }
@@ -103,7 +111,8 @@ export async function clearVersionCache(): Promise<void> {
   try {
     const cachePath = getCacheFilePath()
     await fs.unlink(cachePath)
-  } catch (error) {
+  }
+  catch (error) {
     // 忽略文件不存在的错误
   }
 }

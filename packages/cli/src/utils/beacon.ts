@@ -1,11 +1,12 @@
-import fetch from 'node-fetch'
+/* eslint-disable node/prefer-global/process */
+import type { PromptResult } from '../types'
+import crypto from 'node:crypto'
+import os from 'node:os'
 import dayjs from 'dayjs'
-import os from 'os'
-import crypto from 'crypto'
+import fetch from 'node-fetch'
 import packageJSON from '../../package.json'
-import { getUnibestVersionFromGitee as getUnibestVersion } from './unibestVersion'
-import { PromptResult } from '../types'
 import { debug } from './debug'
+import { getUnibestVersionFromGitee as getUnibestVersion } from './unibestVersion'
 
 /**
  * 发送统计数据到服务器
@@ -36,7 +37,8 @@ export async function beacon(options: PromptResult) {
       }),
     })
     debug('Beacon sent successfully')
-  } catch (error) {
+  }
+  catch (error) {
     // 不需要打印
   }
 }

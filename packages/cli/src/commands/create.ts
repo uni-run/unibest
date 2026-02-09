@@ -1,14 +1,15 @@
+/* eslint-disable node/prefer-global/process */
 /* eslint-disable style/brace-style */
-/* eslint-disable style/operator-linebreak */
+
 import type minimist from 'minimist'
-import { promptUser } from './create/prompts'
-import { generateProject } from './create/generate'
-import { version } from '../../package.json'
 import { intro, log } from '@clack/prompts'
-import { bold, yellow, green } from 'kolorist'
+import { bold, green, yellow } from 'kolorist'
+import { version } from '../../package.json'
+import { beacon } from '../utils/beacon'
 import { getUnibestVersionFromGitee as getUnibestVersion } from '../utils/unibestVersion'
 import { checkProjectNameExistAndValidate } from '../utils/validate'
-import { beacon } from '../utils/beacon'
+import { generateProject } from './create/generate'
+import { promptUser } from './create/prompts'
 
 /**
  * 创建项目命令

@@ -1,3 +1,4 @@
+/* eslint-disable node/prefer-global/process */
 import { magenta } from 'kolorist'
 
 /**

@@ -7,7 +7,7 @@ import { bold, green } from 'kolorist'
 import { version } from '../../package.json'
 import { getFeatureByName } from '../features/interface'
 import { getAvailableFeatureNames, loadFeatureHooks } from '../features/loader'
-import { injectI18n, injectLogin, injectLimeEchart, injectUcharts } from '../utils/injector'
+import { injectI18n, injectLimeEchart, injectLogin, injectUcharts } from '../utils/injector'
 import { logger } from '../utils/logger'
 import { readPackageJson, writePackageJson } from '../utils/readPackageJson'
 
@@ -27,14 +27,14 @@ function getFeatureStatusFromPackageJson(pkgPath: string): Record<string, boolea
   try {
     const pkg = readPackageJson(pkgPath)
     return {
-      i18n: pkg.unibest?.i18n === true,
-      login: pkg.unibest?.loginStrategy === true,
+      'i18n': pkg.unibest?.i18n === true,
+      'login': pkg.unibest?.loginStrategy === true,
       'lime-echart': pkg.unibest?.charts?.limeEchart === true,
-      ucharts: pkg.unibest?.charts?.ucharts === true,
+      'ucharts': pkg.unibest?.charts?.ucharts === true,
     }
   }
   catch {
-    return { i18n: false, login: false, 'lime-echart': false, ucharts: false }
+    return { 'i18n': false, 'login': false, 'lime-echart': false, 'ucharts': false }
   }
 }
 
@@ -149,7 +149,7 @@ async function addFeature(
     }
 
     // 执行 hooks
-    const hooks = await loadFeatureHooks(featureName)
+    const hooks: any = await loadFeatureHooks(featureName)
     if (hooks?.postApply) {
       await hooks.postApply({
         options: { projectName: '', platforms: [], uiLibrary: 'none', i18n: true, loginStrategy: true },

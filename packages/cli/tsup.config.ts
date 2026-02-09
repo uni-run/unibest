@@ -7,6 +7,6 @@ export default defineConfig({
   splitting: false,
   sourcemap: false,
   clean: true,
-  dts: false,  // 禁用 dts 生成，避免类型问题
+  dts: false, // 禁用 dts 生成，避免类型问题
   tsconfig: 'tsconfig.json',
 })

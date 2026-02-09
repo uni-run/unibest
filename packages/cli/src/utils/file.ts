@@ -1,5 +1,6 @@
-import { existsSync, readdirSync, rmdirSync, unlinkSync } from 'fs'
-import { join } from 'path'
+/* eslint-disable node/prefer-global/process */
+import { existsSync, readdirSync, rmdirSync, unlinkSync } from 'node:fs'
+import { join } from 'node:path'
 
 /**
  * 清空目录（保留目录本身）
@@ -18,7 +19,8 @@ export function emptyDir(dir: string): void {
       if (isDir) {
         emptyDir(abs)
         rmdirSync(abs)
-      } else {
+      }
+      else {
         unlinkSync(abs)
       }
     }

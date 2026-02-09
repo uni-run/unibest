@@ -1,9 +1,9 @@
-import { text, multiselect, select, confirm, cancel, isCancel } from '@clack/prompts'
-import { logger } from '../../utils/logger'
-import type { PromptResult, Platform, UILibrary, RequestLibrary, FormatPlugin, TokenStrategy, ChartLibrary } from '../../types'
-import { checkProjectNameExistAndValidate } from '../../utils/validate'
-import { green, red } from 'kolorist'
+import type { ChartLibrary, Platform, PromptResult, UILibrary } from '../../types'
 import process from 'node:process'
+import { cancel, confirm, isCancel, multiselect, select, text } from '@clack/prompts'
+import { green, red } from 'kolorist'
+import { logger } from '../../utils/logger'
+import { checkProjectNameExistAndValidate } from '../../utils/validate'
 
 // 定义常量以便复用和校验
 const VALID_PLATFORMS = ['h5', 'mp-weixin', 'app', 'mp-alipay', 'mp-toutiao']
@@ -31,7 +31,8 @@ export async function promptUser(projectName?: string, argv: Record<string, any>
     if (Array.isArray(platformArg)) {
       // -p h5 -p mp-weixin
       parsedPlatforms = platformArg
-    } else if (typeof platformArg === 'string') {
+    }
+    else if (typeof platformArg === 'string') {
       // -p h5,mp-weixin
       parsedPlatforms = platformArg.split(',')
     }
@@ -57,21 +58,23 @@ export async function promptUser(projectName?: string, argv: Record<string, any>
     uiLibrary = uiArg as UILibrary
   }
 
-   // 3. 解析 Login Strategy
-   const loginArg = argv.l ?? argv.login
-   if (loginArg === true || loginArg === 'true') {
-     loginStrategy = true
-   } else if (loginArg === false || loginArg === 'false') {
-     loginStrategy = false
-   }
+  // 3. 解析 Login Strategy
+  const loginArg = argv.l ?? argv.login
+  if (loginArg === true || loginArg === 'true') {
+    loginStrategy = true
+  }
+  else if (loginArg === false || loginArg === 'false') {
+    loginStrategy = false
+  }
 
-   // 4. 解析 i18n
-   const i18nArg = argv.i ?? argv.i18n
-   if (i18nArg === true || i18nArg === 'true') {
-     i18n = true
-   } else if (i18nArg === false || i18nArg === 'false') {
-     i18n = false
-   }
+  // 4. 解析 i18n
+  const i18nArg = argv.i ?? argv.i18n
+  if (i18nArg === true || i18nArg === 'true') {
+    i18n = true
+  }
+  else if (i18nArg === false || i18nArg === 'false') {
+    i18n = false
+  }
 
   // 5. 解析图表库
   const chartArgs: ChartLibrary[] = []
@@ -97,10 +100,12 @@ export async function promptUser(projectName?: string, argv: Record<string, any>
       const inputProjectName = await text({
         message: `请输入项目名称${green('[项目名称只能包含字母、数字、下划线和短横线，千万别写中文]')}`,
         initialValue: '',
-        validate: value => {
-          if (!value.trim()) return '项目名称不能为空'
+        validate: (value) => {
+          if (!value?.trim())
+            return '项目名称不能为空'
           const errorMessage = checkProjectNameExistAndValidate(value)
-          if (errorMessage) return errorMessage
+          if (errorMessage)
+            return errorMessage
           return
         },
       })
@@ -268,7 +273,8 @@ export async function promptUser(projectName?: string, argv: Record<string, any>
       // tokenStrategy: tokenStrategy as TokenStrategy,
       // formatPlugin: formatPlugin as FormatPlugin,
     }
-  } catch (error) {
+  }
+  catch (error) {
     logger.error(`询问过程出错: ${(error as Error).message}`)
     process.exit(1)
   }

@@ -1,7 +1,8 @@
-import { logger } from './logger'
-import { existsSync } from 'fs'
+/* eslint-disable node/prefer-global/process */
+import { existsSync } from 'node:fs'
+import { join } from 'node:path'
 import { yellow } from 'kolorist'
-import { join } from 'path'
+import { logger } from './logger'
 
 /**
  * 验证项目名称是否符合规范
@@ -10,7 +11,7 @@ import { join } from 'path'
  * @returns 是否有效
  */
 export function validateProjectName(name: string): boolean {
-  const reg = /^[a-zA-Z0-9_-]+$/
+  const reg = /^[\w-]+$/
   if (!reg.test(name)) {
     return false
   }
