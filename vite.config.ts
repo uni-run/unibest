@@ -148,7 +148,8 @@ export default defineConfig(({ command, mode }) => {
         },
       ),
       syncManifestPlugin(),
-      // 自动打开开发者工具插件 (上传时通过 SKIP_OPEN_DEVTOOLS=true 跳过)
+      // 自动打开开发者工具插件 (必须修改 .env 文件中的 VITE_WX_APPID)
+      // 上传时通过 SKIP_OPEN_DEVTOOLS=true 跳过
       SKIP_OPEN_DEVTOOLS !== 'true' && openDevTools({ mode }),
     ],
     define: {
