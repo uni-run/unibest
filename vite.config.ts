@@ -44,7 +44,7 @@ export default defineConfig(({ command, mode }) => {
   // pnpm build:app 时得到 => build production
   // dev 和 build 命令可以分别使用 .env.development 和 .env.production 的环境变量
 
-  const { UNI_PLATFORM } = process.env
+  const { UNI_PLATFORM, SKIP_OPEN_DEVTOOLS } = process.env
   console.log('UNI_PLATFORM -> ', UNI_PLATFORM) // 得到 mp-weixin, h5, app 等
 
   const env = loadEnv(mode, path.resolve(process.cwd(), 'env'))
@@ -78,7 +78,8 @@ export default defineConfig(({ command, mode }) => {
         exclude: ['**/components/**/**.*', '**/sections/**/**.*'],
         // pages 目录为 src/pages，分包目录不能配置在pages目录下！！
         // 是个数组，可以配置多个，但是不能为pages里面的目录！！
-        subPackages: [],
+        // "src/pages-demo" 是unibest demo 预留的，方便后续插入demo示例
+        subPackages: ['src/pages-demo'],
         dts: 'src/types/uni-pages.d.ts',
       }),
       // UniOptimization 插件需要 page.json 文件，故应在 UniPages 插件之后执行
@@ -148,7 +149,8 @@ export default defineConfig(({ command, mode }) => {
       ),
       syncManifestPlugin(),
       // 自动打开开发者工具插件 (必须修改 .env 文件中的 VITE_WX_APPID)
-      openDevTools({ mode }),
+      // 上传时通过 SKIP_OPEN_DEVTOOLS=true 跳过
+      SKIP_OPEN_DEVTOOLS !== 'true' && openDevTools({ mode }),
     ],
     define: {
       __VITE_APP_PROXY__: JSON.stringify(VITE_APP_PROXY_ENABLE),
